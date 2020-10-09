@@ -1,19 +1,60 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app>
+    <Header :index = "index"/>
+    <v-main>
+      <Questions
+        :currentQuestion = "questions[index]"
+        :next = "next"
+        :previous = "previous"
+        :reset  = "reset"
+        v-if="this.questions.length"
+      />
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import axios from "axios";
+import Header from "./components/Header";
+import Questions from "./components/Questions";
 
 export default {
-  name: 'App',
+  name: "App",
+
   components: {
-    HelloWorld
-  }
-}
+    Header,
+    Questions,
+  },
+
+  data: () => ({
+    questions: [],
+    index: 0,
+  }),
+
+  mounted() {
+    axios
+      .get(
+        "https://opentdb.com/api.php?amount=10&category=17&difficulty=easy&type=multiple"
+      )
+      .then((res) => {
+        this.questions = res.data.results;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+  methods: {
+    next () {
+      this.index++;
+    },
+    previous () {
+      this.index--;
+    },
+    reset () {
+      this.index = 0;
+    }
+  },
+};
 </script>
 
 <style>
@@ -21,8 +62,8 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  /* text-align: center; */
+  color: #375470;
   margin-top: 60px;
 }
 </style>
