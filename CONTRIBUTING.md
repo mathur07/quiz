@@ -4,7 +4,7 @@ When contributing to this repository,
 
 - You have complete freedom to come up with new way of implementing what's already there.
 - You can create any numbers of issues and add these to your PR
-- You have complete Freedom to update or re-write the UI (there are no UI recommendations)
+- You have complete freedom to update or re-write the UI (there are no UI recommendations)
 - You can come up with you own APIs.
 
 Please note we have a code of conduct, please follow it in all your interactions with the project.
