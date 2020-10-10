@@ -1,29 +1,23 @@
 <template>
-  <v-app>
-    <Header :index = "index"/>
-    <v-main>
-      <Questions
-        :currentQuestion = "questions[index]"
-        :next = "next"
-        :previous = "previous"
-        :reset  = "reset"
-        v-if="this.questions.length"
-      />
-    </v-main>
-  </v-app>
+<v-app>
+  <Header :index="index" />
+  <v-main>
+    <Quiz :questions="questions" v-if="this.questions.length" />
+  </v-main>
+</v-app>
 </template>
 
 <script>
 import axios from "axios";
 import Header from "./components/Header";
-import Questions from "./components/Questions";
+import Quiz from "./components/Quiz";
 
 export default {
   name: "App",
 
   components: {
     Header,
-    Questions,
+    Quiz,
   },
 
   data: () => ({
@@ -31,27 +25,12 @@ export default {
     index: 0,
   }),
 
-  mounted() {
-    axios
-      .get(
-        "https://opentdb.com/api.php?amount=10&category=17&difficulty=easy&type=multiple"
-      )
-      .then((res) => {
-        this.questions = res.data.results;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  },
-  methods: {
-    next () {
-      this.index++;
-    },
-    previous () {
-      this.index--;
-    },
-    reset () {
-      this.index = 0;
+  async mounted() {
+    try {
+      const res = await axios.get("https://opentdb.com/api.php?amount=10&category=17&difficulty=easy&type=multiple")
+      this.questions = res.data.results;
+    } catch (err) {
+      console.log(err);
     }
   },
 };
