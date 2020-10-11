@@ -2,6 +2,9 @@
 node_modules
 /dist
 
+# Coverage directory used by tools like jest, istanbul, etc
+coverage
+*.lcov
 
 # local env files
 .env.local
