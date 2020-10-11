@@ -66,6 +66,7 @@ export default {
     reset() {
       this.index = 0;
       this.answers = [];
+      EventBus.$emit("answers", this.answers);
       this.navigator();
     },
     navigator() {
