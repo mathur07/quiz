@@ -17,10 +17,13 @@
           We have recorded {{ totalResponses }} responses. <br />You can check
           your result by clicking on "view result".
         </div>
-        <v-btn class="mt-6 mx-2"> View Result </v-btn>
-        <v-btn class="mt-6 mx-2" color="error" @click="sheet = !sheet">
+        <v-btn @click="ResultsDisplayed(answers)" class="mt-6 mx-2"> View Result </v-btn>
+        <v-btn class="mt-6 mx-2" color="error" @click="sheet = !sheet; ButtonOn = false">
           close
         </v-btn>
+        <div v-if="ButtonOn" class="mt-6 mx-2">
+          "You gave {{CorrectCount}} Correct Answers"
+        </div>
       </v-sheet>
     </v-bottom-sheet>
   </div>
@@ -33,6 +36,9 @@ export default {
     answers: [],
     sheet: false,
     totalResponses: 0,
+    CorrectCount: 0,
+    ButtonOn: false
+    
   }),
   created() {
     EventBus.$on("answers", this.setAnswers);
@@ -47,6 +53,16 @@ export default {
       });
       this.totalResponses = result.length;
     },
+    ResultsDisplayed(SelectedArray) {
+      this.CorrectCount = 0
+      for (var value of SelectedArray) {
+        if (value["selectedOption"] === value["correct_answer"])
+        {
+          this.CorrectCount+=1;
+        }
+      }
+      this.ButtonOn=true
+    }
   },
 };
 </script>
