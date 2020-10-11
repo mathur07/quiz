@@ -1,73 +1,86 @@
 <template>
-<div>
   <Question :question="currentQuestion">
     <template v-slot:actions>
-      <v-btn @click="previous" class="ma-2" outlined color="indigo" :disabled="index < 1">Previous</v-btn>
-      <v-btn @click="next" color="primary" :disabled="questions.length && index >= questions.length - 1">Next</v-btn>
+      <v-btn
+        @click="previous"
+        class="ma-2"
+        outlined
+        color="indigo"
+        :disabled="index < 1"
+        >Previous</v-btn
+      >
+      <v-btn
+        @click="next"
+        class="ma-2"
+        color="primary"
+        :disabled="questions.length && index >= questions.length - 1"
+        >Next</v-btn
+      >
+      <v-btn @click="reset" class="ma-2" color="warning" :disabled="index < 1"
+        >Reset</v-btn
+      >
       <v-spacer></v-spacer>
-      <v-btn color="success" :disabled="!questions.length || !answers.length || questions.length !== answers.length">Submit</v-btn>
-      <v-btn @click="reset" color="warning" :disabled="answers.length < 1">Reset</v-btn>
+      <Result class="ma-2" />
     </template>
   </Question>
-</div>
 </template>
 
 <script>
-import Question from "./Question"
-import EventBus from '../event-bus'
+import Question from "./Question";
+import Result from "./Result";
+import EventBus from "../event-bus";
 
 export default {
+  components: {
+    Question,
+    Result,
+  },
   props: {
     questions: Array,
   },
-
-  components: {
-    Question,
+  data: () => ({
+    answers: [],
+    index: 0,
+  }),
+  created() {
+    const self = this;
+    EventBus.$on("selected-option", self.updateSelectedOption);
   },
-
+  destroyed() {
+    EventBus.$off("selected-option");
+  },
   computed: {
     currentQuestion() {
-      return this.questions[this.index]
-    }
+      return this.questions[this.index];
+    },
   },
-  data: () => ({
-    index: 0,
-    answers: [],
-    selectedOption: null,
-    correctOption: null,
-  }),
-
-  created() {
-    const self = this
-    EventBus.$on('answer', self.updateAnswer)
-  },
-
-  destroyed() {
-    EventBus.$off('answer')
-  },
-
   methods: {
     next() {
-      this.index++
-      EventBus.$emit('question-changed')
+      this.index++;
+      this.navigator();
     },
     previous() {
-      this.index--
-      EventBus.$emit('question-changed')
+      this.index--;
+      this.navigator();
     },
     reset() {
-      this.index = 0
-      this.answers = []
-      EventBus.$emit('question-changed')
+      this.index = 0;
+      this.answers = [];
+      this.navigator();
     },
-    updateAnswer(answer) {
+    navigator() {
+      EventBus.$emit("question-changed");
+      EventBus.$emit("update-question-count", this.index);
+    },
+    updateSelectedOption(selectedOption) {
       const ans = {
         ...this.currentQuestion,
-        answer
-      }
+        selectedOption,
+      };
+      this.answers[this.index] = ans;
 
-      this.answers[this.index] = ans
-    }
+      EventBus.$emit("answers", this.answers);
+    },
   },
 };
 </script>
