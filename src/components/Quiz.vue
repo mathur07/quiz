@@ -13,7 +13,7 @@
         @click="next"
         class="ma-2"
         color="primary"
-        :disabled="questions.length && index >= questions.length - 1"
+        :disabled="questions && questions.length && index >= questions.length - 1"
         >Next</v-btn
       >
       <v-btn @click="reset" class="ma-2" color="warning" :disabled="index < 1"
@@ -51,7 +51,9 @@ export default {
   },
   computed: {
     currentQuestion() {
-      return this.questions[this.index];
+      return this.questions && this.questions.length > 0
+        ? this.questions[this.index]
+        : {};
     },
   },
   methods: {

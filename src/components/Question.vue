@@ -1,6 +1,6 @@
 <template>
   <v-card class="mx-auto" max-width="600">
-    <v-card-title>{{ question.question }}</v-card-title>
+    <v-card-title>{{ question ? question.question : "" }}</v-card-title>
     <v-list rounded>
       <v-list-item-group v-model="selectedOptionIndex" color="primary">
         <v-list-item
@@ -45,11 +45,16 @@ export default {
   },
   computed: {
     options() {
-      let options = [
-        ...this.question.incorrect_answers,
-        this.question.correct_answer,
-      ];
-      return _lodash.shuffle(options);
+      let options = {};
+      if (this.question) {
+        options = [
+          ...(this.question.incorrect_answers || []),
+          this.question.correct_answer,
+        ];
+        return _lodash.shuffle(options);
+      } else {
+        return options;
+      }
     },
   },
   watch: {
