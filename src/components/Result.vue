@@ -12,17 +12,28 @@
           Submit
         </v-btn>
       </template>
-      <v-sheet class="text-center" height="400px">
+      <v-sheet class="text-center" height="300px">
         <div class="py-3">
           We have recorded {{ totalResponses }} responses. <br />You can check
           your result by clicking on "view result".
         </div>
-        <v-btn @click="ResultsDisplayed(answers)" class="mt-6 mx-2"> View Result </v-btn>
-        <v-btn class="mt-6 mx-2" color="error" @click="sheet = !sheet; ButtonOn = false">
+        <v-btn @click="viewResult(answers)" class="mt-6 mx-2">
+          View Result
+        </v-btn>
+        <v-btn
+          class="mt-6 mx-2"
+          color="error"
+          @click="
+            correctAnswerCount = 0;
+            sheet = !sheet;
+            viewCorrectAnswerCount = false;
+          "
+        >
           close
         </v-btn>
-        <div v-if="ButtonOn" class="mt-6 mx-2">
-          "You gave {{CorrectCount}} Correct Answers"
+        <div v-if="viewCorrectAnswerCount" class="mt-6 mx-2">
+          "{{ correctAnswerCount }} are correct out of
+          {{ totalResponses }} questions you attempted"
         </div>
       </v-sheet>
     </v-bottom-sheet>
@@ -36,9 +47,8 @@ export default {
     answers: [],
     sheet: false,
     totalResponses: 0,
-    CorrectCount: 0,
-    ButtonOn: false
-    
+    correctAnswerCount: 0,
+    viewCorrectAnswerCount: false,
   }),
   created() {
     EventBus.$on("answers", this.setAnswers);
@@ -53,16 +63,15 @@ export default {
       });
       this.totalResponses = result.length;
     },
-    ResultsDisplayed(SelectedArray) {
-      this.CorrectCount = 0
-      for (var value of SelectedArray) {
-        if (value["selectedOption"] === value["correct_answer"])
-        {
-          this.CorrectCount+=1;
-        }
-      }
-      this.ButtonOn=true
-    }
+    viewResult(answersArray) {
+      this.CorrectCount = 0;
+      answersArray.forEach((element) => {
+        element.selectedOption === element.correct_answer
+          ? this.correctAnswerCount++
+          : null;
+      });
+      this.viewCorrectAnswerCount = true;
+    },
   },
 };
 </script>
