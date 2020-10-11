@@ -32,8 +32,7 @@ export default {
   data: () => ({
     answers: [],
     sheet: false,
-    totalResponses: 0,
-    flag : 0
+    totalResponses: 0
   }),
   created() {
     EventBus.$on("answers", this.setAnswers);
