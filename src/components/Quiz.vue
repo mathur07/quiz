@@ -32,7 +32,6 @@ import EventBus from "../event-bus";
 
 import _lodash from "lodash";
 
-
 export default {
   components: {
     Question,
@@ -42,7 +41,7 @@ export default {
     questions: Array,
   },
   data: () => ({
-    optionsArrays: [],
+    options: [],
     answers: [],
     index: 0,
   }),
@@ -66,7 +65,6 @@ export default {
     next() {
       this.index++;
       this.navigator();
-      console.log(this.options);
     },
     previous() {
       this.index--;
