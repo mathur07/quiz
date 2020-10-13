@@ -1,5 +1,5 @@
 <template>
-  <Question :question="currentQuestion">
+  <Question :question="currentQuestion" :options="options[index]">
     <template v-slot:actions>
       <v-btn
         @click="previous"
@@ -30,6 +30,9 @@ import Question from "./Question";
 import Result from "./Result";
 import EventBus from "../event-bus";
 
+import _lodash from "lodash";
+
+
 export default {
   components: {
     Question,
@@ -39,12 +42,15 @@ export default {
     questions: Array,
   },
   data: () => ({
+    optionsArrays: [],
     answers: [],
     index: 0,
   }),
   created() {
     const self = this;
     EventBus.$on("selected-option", self.updateSelectedOption);
+
+    this.options = this.questions.map(question => _lodash.shuffle([...question.incorrect_answers, question.correct_answer]));
   },
   destroyed() {
     EventBus.$off("selected-option");
@@ -60,6 +66,7 @@ export default {
     next() {
       this.index++;
       this.navigator();
+      console.log(this.options);
     },
     previous() {
       this.index--;
