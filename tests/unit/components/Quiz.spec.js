@@ -13,6 +13,19 @@ Vue.use(Vuetify);
 
 const localVue = createLocalVue();
 
+const questions = [{
+    "category": "Science & Nature",
+    "correct_answer": "Femur",
+    "difficulty": "easy",
+    "incorrect_answers": [
+        "Cranium",
+        "Humerus",
+        "Tibia"
+    ],
+    "question": "Which of these bones is hardest to break?",
+    "type": "multiple"
+}]
+
 describe('Quiz.vue', () => {
     let vuetify
     beforeEach(() => {
@@ -22,6 +35,9 @@ describe('Quiz.vue', () => {
         const wrapper = mount(Quiz, {
             localVue,
             vuetify,
+            propsData: {
+                questions
+            }
         })
         expect(wrapper).toMatchSnapshot
     });
