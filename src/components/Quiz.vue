@@ -48,7 +48,7 @@ export default {
   created() {
     const self = this;
     EventBus.$on("selected-option", self.updateSelectedOption);
-
+    
     this.options = this.questions.map(question => _lodash.shuffle([...question.incorrect_answers, question.correct_answer]));
   },
   destroyed() {
