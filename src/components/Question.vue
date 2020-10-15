@@ -23,12 +23,12 @@
 </template>
 
 <script>
-import _lodash from "lodash";
 import EventBus from "../event-bus";
 
 export default {
   props: {
     question: Object,
+    options: Array
   },
 
   data: () => ({
@@ -42,20 +42,6 @@ export default {
 
   destroyed() {
     EventBus.$off("question-changed");
-  },
-  computed: {
-    options() {
-      let options = {};
-      if (this.question) {
-        options = [
-          ...(this.question.incorrect_answers || []),
-          this.question.correct_answer,
-        ];
-        return _lodash.shuffle(options);
-      } else {
-        return options;
-      }
-    },
   },
   watch: {
     selectedOptionIndex: function (value) {
