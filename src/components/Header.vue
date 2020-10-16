@@ -14,9 +14,7 @@ export default {
   }),
   mounted() {
     const self = this;
-    EventBus.$on("update-question-count", function (index) {
-      self.updateIndex(index);
-    });
+    EventBus.$on("update-question-count", self.updateIndex);
   },
   destroyed() {
     EventBus.$off("update-question-count");
